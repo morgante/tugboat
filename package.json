@@ -8,7 +8,8 @@
     "async": ">= 0.0.0",
     "request": ">= 0.0.0",
     "mongoose": ">= 0.0.0",
-    "tar": "~0.1.19"
+    "tar": "~0.1.19",
+    "dockerode": "~1.2.8"
   },
   "engines": {
     "node": "0.8.x",
