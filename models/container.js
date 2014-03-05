@@ -17,22 +17,29 @@ var containerSchema = mongoose.Schema({
 	"ports": mongoose.Schema.Types.Mixed
 });
 
-containerSchema.methods.buildPub = function(callback) {
-	var string = '';
-
+containerSchema.methods.getKeys = function(cb) {
 	this.populate('users', function(err, doc) {
 		async.map(doc.users, function(user, callback) {
 			github.user.getKeysFromUser({user: user.github}, function(err, data) {
-				console.log(err, data);
+				if (err) {
+					callback(err, null);
+				} else {
+					callback(null, data);
+				}
 			});
 		}, function(err, results) {
-			console.log(results);
+			if (err) {
+				cb(err, null);
+			} else {
+				results = _.flatten(results);
+				results = _.pluck(results, 'key');
+				
+				var string = _.reduce(results, function(memo, key){ return memo + key + "\n"; }, '');
+				
+				cb(null, string);
+			}
 		});
 	});
-
-	// async.map(this.users, function())
-
-	callback(null, string);
 };
 
 containerSchema.methods.addUser = function(user, callback) {
@@ -40,8 +47,15 @@ containerSchema.methods.addUser = function(user, callback) {
 
 	this.users.push(user);
 
-	this.buildPub(function(err, string) {
-		console.log('pub', string);
+	this.getKeys(function(err, string) {
+		var name = new Date().getTime() + '.pub'; // lazy
+
+		files.store({
+			"name": name,
+			"content": string
+		}, function(err, res) {
+			console.log(err, res);
+		});
 	});
 
 	// files.store({
