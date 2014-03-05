@@ -13,9 +13,10 @@ RUN			gem install foreman
 
 # Load in source
 ADD 		. /src
+RUN			cd /src && npm install
 
 EXPOSE  	8080
 
 WORKDIR		/src
 
-CMD 		["foreman", "start"]
+CMD		 	["foreman", "start"]
