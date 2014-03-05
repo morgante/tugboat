@@ -7,7 +7,7 @@ var express = require('express')
 		, _ = require('./public/lib/underscore')
 		
 var pkg = require('./package.json')
-		, main = require('./routes/main')
+		, main = require('./lib/main')
 
 // set up Mongoose
 var mongoConns = {
