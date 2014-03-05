@@ -8,8 +8,8 @@ RUN			apt-get -y install rubygems
 RUN			gem install foreman
 
 # Install app dependencies
-ADD 		package.json /src/package.json
-RUN			cd /src && npm install
+# ADD 		package.json /modules/package.json
+# RUN			cd /modules && npm install
 
 # Load in source
 ADD 		. /src
