@@ -9,6 +9,11 @@ var express = require('express')
 var pkg = require('./package.json')
 		, main = require('./lib/main')
 
+var vms = require('./lib/vms');
+
+var Container = require('./models/container');
+var User = require('./models/user');
+
 // set up Mongoose
 var mongoConns = {
 	docker: 'mongodb://' + process.env.DB_PORT_27017_TCP_ADDR + ':' + process.env.DB_PORT_27017_TCP_PORT + '/' + pkg.name
@@ -20,6 +25,18 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback() {
   console.log('Connected to DB');
+
+	User.create({"netID": "mp3255", "github": "morgante"}, function(err, user) {
+		Container.create({"image": "morgante/ssh"}, function(err, container) {
+			container.addUser(user, function(err, container) {
+				console.log(err, container);
+				// container.run({}, function(err, dat) {
+				// 	console.log('container was run');
+				// });
+			});
+		});
+	});
+
 });
 
 var app = express();
@@ -49,4 +66,5 @@ console.log('hello ' + port);
 // start listening
 app.listen( port , function() {
   console.log('Express server listening on port ' + port);
+
 });
