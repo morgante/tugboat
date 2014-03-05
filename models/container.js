@@ -1,9 +1,12 @@
 // we need mongoose
 var mongoose = require('mongoose');
 var _ = require('../public/lib/underscore');
+var async = require('async');
+var request = require('request');
 
 var vms = require('../lib/vms');
 var files = require('../lib/files');
+var github = require('../lib/github');
 
 var User = require('./user');
 	
@@ -17,13 +20,25 @@ var containerSchema = mongoose.Schema({
 containerSchema.methods.buildPub = function(callback) {
 	var string = '';
 
+	this.populate('users', function(err, doc) {
+		async.map(doc.users, function(user, callback) {
+			github.user.getKeysFromUser({user: user.github}, function(err, data) {
+				console.log(err, data);
+			});
+		}, function(err, results) {
+			console.log(results);
+		});
+	});
+
+	// async.map(this.users, function())
+
 	callback(null, string);
 };
 
 containerSchema.methods.addUser = function(user, callback) {
 	var self = this;
 
-	this.users.push(user.id);
+	this.users.push(user);
 
 	this.buildPub(function(err, string) {
 		console.log('pub', string);

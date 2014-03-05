@@ -12,10 +12,6 @@ var pkg = require('./package.json')
 var vms = require('./lib/vms');
 var files = require('./lib/files');
 
-files.store({'data': {'foo': 'bar'}}, function(err, data) {
-	console.log('s3', err, data);
-});
-
 var Container = require('./models/container');
 var User = require('./models/user');
 
