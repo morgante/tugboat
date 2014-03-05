@@ -8,6 +8,7 @@ var express = require('express')
 		
 var pkg = require('./package.json')
 		, main = require('./lib/main')
+		, build = require('./lib/build');
 
 // set up Mongoose
 var mongoConns = {
@@ -40,6 +41,11 @@ app.configure(function() {
 
 // set up routes
 app.get('/', main.index);
+
+// build it
+build.create({}, function(err, data) {
+	console.log('build eh?');
+});
 
 // port
 var port = process.env.PORT || 8080;
