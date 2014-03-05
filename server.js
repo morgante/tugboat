@@ -10,6 +10,11 @@ var pkg = require('./package.json')
 		, main = require('./lib/main')
 
 var vms = require('./lib/vms');
+var files = require('./lib/files');
+
+files.store({'data': {'foo': 'bar'}}, function(err, data) {
+	console.log('s3', err, data);
+});
 
 var Container = require('./models/container');
 var User = require('./models/user');
@@ -24,18 +29,15 @@ mongoose.connect(mongoConn);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback() {
-  console.log('Connected to DB');
-
-	User.create({"netID": "mp3255", "github": "morgante"}, function(err, user) {
-		Container.create({"image": "morgante/ssh"}, function(err, container) {
-			container.addUser(user, function(err, container) {
-				container.run({}, function(err, dat) {
-					console.log(container);
-				});
-			});
-		});
-	});
-
+	// User.create({"netID": "mp3255", "github": "morgante"}, function(err, user) {
+	// 	Container.create({"image": "morgante/ssh"}, function(err, container) {
+	// 		container.addUser(user, function(err, container) {
+	// 			container.run({}, function(err, dat) {
+	// 				console.log(container);
+	// 			});
+	// 		});
+	// 	});
+	// });
 });
 
 var app = express();
