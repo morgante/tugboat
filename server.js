@@ -29,15 +29,15 @@ mongoose.connect(mongoConn);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback() {
-	// User.create({"netID": "mp3255", "github": "morgante"}, function(err, user) {
-	// 	Container.create({"image": "morgante/ssh"}, function(err, container) {
-	// 		container.addUser(user, function(err, container) {
-	// 			container.run({}, function(err, dat) {
-	// 				console.log(container);
-	// 			});
-	// 		});
-	// 	});
-	// });
+	User.create({"netID": "mp3255", "github": "morgante"}, function(err, user) {
+		Container.create({"image": "morgante/ssh"}, function(err, container) {
+			container.addUser(user, function(err, container) {
+				container.run({}, function(err, dat) {
+					console.log(container);
+				});
+			});
+		});
+	});
 });
 
 var app = express();
