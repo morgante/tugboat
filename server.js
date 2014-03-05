@@ -29,10 +29,9 @@ db.once('open', function callback() {
 	User.create({"netID": "mp3255", "github": "morgante"}, function(err, user) {
 		Container.create({"image": "morgante/ssh"}, function(err, container) {
 			container.addUser(user, function(err, container) {
-				console.log(err, container);
-				// container.run({}, function(err, dat) {
-				// 	console.log('container was run');
-				// });
+				container.run({}, function(err, dat) {
+					console.log(container);
+				});
 			});
 		});
 	});

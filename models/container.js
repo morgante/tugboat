@@ -8,7 +8,8 @@ var User = require('./user');
 var containerSchema = mongoose.Schema({
 	"image": String,
 	"container": String,
-	"users" : [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+	"users" : [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+	"ports": mongoose.Schema.Types.Mixed
 });
 
 containerSchema.methods.addUser = function(user, callback) {
@@ -21,12 +22,12 @@ containerSchema.methods.addUser = function(user, callback) {
 		path: '/root/.ssh/authorized_keys',
 		url: 'https://raw.github.com/morgante/docker-ssh/master/id_rsa.pub'
 	}, function(err, data) {
-		console.log(err, data);
-	});
+		self.image = data;
 
-	// this.save(function(err, container) {
-		// callback(err, container);
-	// });
+		self.save(function(err, container) {
+			callback(err, container);
+		});
+	});
 };
 
 containerSchema.methods.run = function(options, callback) {
@@ -38,6 +39,7 @@ containerSchema.methods.run = function(options, callback) {
 
 	vms.run(options, function(err, info) {
 		self.container = info.container.id;
+		self.ports = info.data.NetworkSettings.Ports;
 		self.save();
 	});
 };
