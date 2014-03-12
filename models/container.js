@@ -53,29 +53,20 @@ containerSchema.methods.addUser = function(user, callback) {
 		files.store({
 			"name": name,
 			"content": string
-		}, function(err, res) {
-			console.log(err, res);
+		}, function(err, url, data) {
+			vms.insert({
+				image: self.image,
+				path: '/root/.ssh/authorized_keys',
+				url: url,
+			}, function(err, data) {
+				self.image = data;
+
+				self.save(function(err, container) {
+					callback(err, container);
+				});
+			});
 		});
 	});
-
-	// files.store({
-	// 	"name": "swdfwefjwf.pub",
-	// 	"content": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZbHVHg2pFlVMLIs8E8BsncLus2I5ZJe/vX+Oog7neKTQkNqJSrhN1CdtFKIsSvSkrR1MGEIqPk7+Cwc9mV4NftvQEAkk/oSUNTQBk8XLp0WHw5JtfaCIV+5s9eS9fcHyB9O5eEvpnHRAocM6iSXi51gO3MqNrx02XsF6OXo5fG73KcGi8zK8haGrEBCxygduu39z2dGCEOpAt3HDF90bUCRXHBD+91E2clV3216S2SUkmSbCu35wJ+waXoAEN77zBdlceMCatXim9M7shBpaelCs/Ssx4K5ab3Zh8ZmLkdObYGa7det+xYrvQ0ke+G7Ok5LI6xr8NLTpXO6PMjS23 morgantepell@kore.local"
-	// }, function(err, res) {
-	// 	console.log(err, res);
-	// });
-
-	// vms.insert({
-	// 	image: self.image,
-	// 	path: '/root/.ssh/authorized_keys',
-	// 	url: 'https://raw.github.com/morgante/tugboat/keys/keys/swdfwefjwf.pub'
-	// }, function(err, data) {
-	// 	self.image = data;
-
-	// 	self.save(function(err, container) {
-	// 		callback(err, container);
-	// 	});
-	// });
 };
 
 containerSchema.methods.run = function(options, callback) {
