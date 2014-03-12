@@ -10,7 +10,9 @@
     "mongoose": ">= 0.0.0",
     "tar": "~0.1.19",
     "dockerode": "~1.2.8",
-    "github": "git://github.com/morgante/node-github.git#master"
+    "github": "git://github.com/morgante/node-github.git#master",
+    "passport-nyu": "~0.1.2",
+    "passport": "~0.2.0"
   },
   "engines": {
     "node": "0.8.x",
