@@ -12,7 +12,7 @@ var NYUPassportStrategy = require('passport-nyu').Strategy;
 var pkg = require('./package.json')
 		, main = require('./lib/main');
 
-var auth = require('./router/auth');
+var auth = require('./routes/auth');
 
 var vms = require('./lib/vms');
 var files = require('./lib/files');

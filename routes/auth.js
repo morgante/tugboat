@@ -18,8 +18,6 @@ exports.finish = function(req, res){
 	}
 	else
 	{
-		res.send(req.user);
-
 		// otherwise, send home
 		res.redirect( process.env.BASE_URL );
 	}
