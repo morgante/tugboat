@@ -16,6 +16,7 @@ var main = require('./routes/main');
 
 var vms = require('./lib/vms');
 var files = require('./lib/files');
+var login = require('./lib/login');
 
 var Container = require('./models/container');
 var User = require('./models/user');
@@ -57,6 +58,8 @@ app.configure(function() {
 
 	app.use(passport.initialize());
 	app.use(passport.session());
+
+	app.use(login.fake);
 
 	app.use(app.router);
 	app.use(express.static(__dirname + '/public'));

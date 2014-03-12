@@ -6,8 +6,16 @@ var Container = require('../models/container');
 
 exports.index = function( req, res ) {
 	if (req.user) {
-		res.render("dashboard", {
-			project: pkg.name
+		req.user.hasKeys(function(err, yes) {
+			if (yes) {
+				res.render("dashboard", {
+					project: pkg.name
+				});
+			} else {
+				res.render("keyprompt", {
+					project: pkg.name
+				});
+			}
 		});
 	} else {
 		res.render("splash", {
