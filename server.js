@@ -4,10 +4,15 @@ var express = require('express')
 		, async = require('async')
 		, request = require('request')
 		, mongoose = require('mongoose')
-		, _ = require('./public/lib/underscore')
+		, _ = require('./public/lib/underscore');
+
+var passport = require('passport');
+var NYUPassportStrategy = require('passport-nyu').Strategy;
 		
 var pkg = require('./package.json')
-		, main = require('./lib/main')
+		, main = require('./lib/main');
+
+var auth = require('./router/auth');
 
 var vms = require('./lib/vms');
 var files = require('./lib/files');
@@ -47,13 +52,54 @@ app.configure(function() {
 	app.use(express.cookieParser());
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
-	app.use(express.session({ secret: process.env.SECRET }));
+	app.use(express.session({ key: 'tugboat.sess', secret: process.env.SECRET }));
+	app.use(express.cookieParser( process.env.SECRET ));
+
+	app.use(passport.initialize());
+	app.use(passport.session());
+
 	app.use(app.router);
 	app.use(express.static(__dirname + '/public'));
 });
 
-// set up routes
+/** ROUTES **/
 app.get('/', main.index);
+
+// passport auth
+app.get('/auth/start', auth.start); // start the auth process
+app.get('/auth/passport', passport.authenticate('nyu-passport')); // pass along to passport
+app.get('/auth/passport/callback', passport.authenticate('nyu-passport', { successRedirect: '/auth/end', failureRedirect: '/auth/passport' })); // hear back from Passport
+app.get('/auth/end', auth.finish); // finish the auth process
+
+
+/** PASSPORT */
+// authentication with passport
+passport.serializeUser(function(user, done) {
+	done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+	User.findById(id, function(err, user) {
+		done(err, user);
+	});
+});
+
+// oauth
+passport.use('nyu-passport', new NYUPassportStrategy({
+	clientID: process.env.PASSPORT_ID,
+	clientSecret: process.env.PASSPORT_SECRET,
+	callbackURL: process.env.BASE_URL + '/auth/passport/callback'
+	},
+	function(accessToken, refreshToken, profile, done) {
+		user = {
+			token: accessToken,
+			netID: profile.netID
+		};
+		done(null, user);
+	}
+));
+
+
 
 // port
 var port = process.env.PORT || 8080;
