@@ -10,9 +10,9 @@ var passport = require('passport');
 var NYUPassportStrategy = require('passport-nyu').Strategy;
 		
 var pkg = require('./package.json')
-		, main = require('./lib/main');
 
 var auth = require('./routes/auth');
+var main = require('./routes/main');
 
 var vms = require('./lib/vms');
 var files = require('./lib/files');
@@ -71,7 +71,6 @@ app.get('/auth/passport', passport.authenticate('nyu-passport')); // pass along 
 app.get('/auth/passport/callback', passport.authenticate('nyu-passport', { successRedirect: '/auth/end', failureRedirect: '/auth/passport' })); // hear back from Passport
 app.get('/auth/end', auth.finish); // finish the auth process
 
-
 /** PASSPORT */
 // authentication with passport
 passport.serializeUser(function(user, done) {
@@ -94,15 +93,26 @@ passport.use('nyu-passport', new NYUPassportStrategy({
 		User.findOrCreate({netID: profile.netID}, function(err, user, isNew) {
 			// add the access token
 			user.passport = accessToken;
-			user.save(function(err) {
+
+			if (isNew) {
+				request('http://passport.sg.nyuad.org/visa/github/token?access_token=' + accessToken, function(err, res, data) {
+					data = JSON.parse(data);
+
+					user.github.username = data.profile.username;
+					user.github.token = data.access_token;
+
+					user.save(function(err) {
+						done(null, user);
+					});
+				});
+			} else {
+				user.save(function(err) {
+				});
 				done(null, user);
-			});
-			done(null, user);
+			}
 		});
 	}
 ));
-
-
 
 // port
 var port = process.env.PORT || 8080;
@@ -111,6 +121,5 @@ console.log('hello ' + port);
 
 // start listening
 app.listen( port , function() {
-  console.log('Express server listening on port ' + port);
-
+	console.log('Express server listening on port ' + port);
 });

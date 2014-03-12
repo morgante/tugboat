@@ -6,7 +6,10 @@ var _ = require('../public/lib/underscore');
 	
 var schema = mongoose.Schema({
 	"netID": String,
-	"github": String,
+	"github": {
+		"username": String,
+		"token": String
+	},
 	"passport": String
 });
 
