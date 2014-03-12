@@ -91,11 +91,14 @@ passport.use('nyu-passport', new NYUPassportStrategy({
 	callbackURL: process.env.BASE_URL + '/auth/passport/callback'
 	},
 	function(accessToken, refreshToken, profile, done) {
-		user = {
-			token: accessToken,
-			netID: profile.netID
-		};
-		done(null, user);
+		User.findOrCreate({netID: profile.netID}, function(err, user, isNew) {
+			// add the access token
+			user.passport = accessToken;
+			user.save(function(err) {
+				done(null, user);
+			});
+			done(null, user);
+		});
 	}
 ));
 
