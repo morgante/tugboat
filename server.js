@@ -31,15 +31,6 @@ mongoose.connect(mongoConn);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback() {
-	// User.create({"netID": "mp3255", "github": "morgante"}, function(err, user) {
-	// 	Container.create({"image": "morgante/ssh"}, function(err, container) {
-	// 		container.addUser(user, function(err, container) {
-	// 			container.run({}, function(err, dat) {
-	// 				console.log(container);
-	// 			});
-	// 		});
-	// 	});
-	// });
 });
 
 var app = express();
@@ -73,6 +64,9 @@ app.get('/auth/start', auth.start); // start the auth process
 app.get('/auth/passport', passport.authenticate('nyu-passport')); // pass along to passport
 app.get('/auth/passport/callback', passport.authenticate('nyu-passport', { successRedirect: '/auth/end', failureRedirect: '/auth/passport' })); // hear back from Passport
 app.get('/auth/end', auth.finish); // finish the auth process
+
+// API for backbone
+app.post('/api/instances', main.create);
 
 /** PASSPORT */
 // authentication with passport

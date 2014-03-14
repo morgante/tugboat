@@ -8,7 +8,7 @@ define([
         evaluate : /\{\( (.+?) \)\}/gi,
         interpolate : /\{\{ (.+?) \}\}/gi,
     };
-    
+
 	// The Dashboard View
 	// ---------------
 	var Dashboard = Backbone.View.extend({
@@ -29,7 +29,7 @@ define([
 		},
 
 		createOne: function (e) {
-			this.collection.create({name: "samson"});
+			this.collection.create({}, {wait: true});
 		},
 
 		addInstance: function(model) {

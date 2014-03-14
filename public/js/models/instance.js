@@ -9,7 +9,6 @@ define([
 		// Default attributes for the todo
 		// and ensure that each todo created has `title` and `completed` keys.
 		defaults: {
-			name: 'samonson'
 		}
 	});
 
