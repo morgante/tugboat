@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title><%= project %></title>
+	
+	<link href="lib/bootstrap.css" rel="stylesheet">
+	
+	<link href="css/style.css" rel="stylesheet">
+
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="brand pull-left" href="#"><%= project %></a>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container meta" id="prompt">
+		<div class="hero-unit content" id="dashboard">
+			<p>Welcome to Tugboat.</p>
+
+			<div class="controls">
+				<button type="button" id="newContainer" data-loading-text="Loading..." class="btn btn-primary">
+					Start container
+				</button>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container meta hide" id="loading">
+		<div class="hero-unit">
+			<h1>Loading...</h1>
+			<div class="progress progress-striped active">
+			  <div class="bar" style="width: 100%;"></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Backbone Templates -->
+    <script id="dashboard-template" type="text/template">
+    	Hello Bob.
+    </script>
+
+	<script data-main="js/app.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+
+</body>
+
+</html>
