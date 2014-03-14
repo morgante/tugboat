@@ -41,7 +41,24 @@
 
 	<!-- Backbone Templates -->
     <script id="dashboard-template" type="text/template">
-    	Hello Bob.
+    	<h3>Instances</h3>
+    	<div id="instances">
+    	</div>
+
+    	<div class="controls">
+	    	<button type="button" id="newContainer" data-loading-text="Loading..." class="btn btn-primary">
+	    		<span class="glyphicon glyphicon-plus"></span>
+				New container
+			</button>
+		</div>
+
+    </script>
+
+    <script id="instance-template" type="text/template">
+    	<div class="instance">
+    		<h3>{{ name }}</h3>
+    		<p>This is an instance.</p>
+    	</div>
     </script>
 
 	<script data-main="js/app.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>

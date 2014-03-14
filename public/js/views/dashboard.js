@@ -1,25 +1,40 @@
 define([
 	'jquery',
 	'underscore',
-    'backbone'
-], function ($, _, Backbone) {
+    'backbone',
+    'views/instance',
+], function ($, _, Backbone, InstanceView) {
+	_.templateSettings = {
+        evaluate : /\{\( (.+?) \)\}/gi,
+        interpolate : /\{\{ (.+?) \}\}/gi,
+    };
+    
 	// The Dashboard View
 	// ---------------
-
 	var Dashboard = Backbone.View.extend({
 		template: _.template($('#dashboard-template').html()),
 
 		el: '#dashboard',
 
-		initialize: function () {
-			// this.$map = $('.map', this.$el);
+		events: {
+			'click #newContainer':		'createOne'
+		},
 
-			// this.scores = this.collection;
-			// this.countries = new Countries;
+		initialize: function () {
+			this.listenTo(this.collection, 'add', this.addInstance);
 
 			// render off the bat
 			this.render();
 		
+		},
+
+		createOne: function (e) {
+			this.collection.create({name: "samson"});
+		},
+
+		addInstance: function(model) {
+			var view = new InstanceView({ model: model });
+			$('#instances').append(view.render().el);
 		},
 
 		render: function () {

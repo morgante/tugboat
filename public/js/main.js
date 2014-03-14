@@ -2,9 +2,10 @@ define([
 	'jquery',
 	'underscore',
     'backbone',
-    'views/dashboard'
-], function ($, _, Backbone, Dashboard) {
+    'views/dashboard',
+    'collections/instances'
+], function ($, _, Backbone, Dashboard, instances) {
 
-	dash = new Dashboard();
+	dash = new Dashboard({collection: instances});
 
 });
