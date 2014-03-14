@@ -31,7 +31,7 @@ containerSchema.set('toJSON', { virtuals: true });
 containerSchema.methods.getKeys = function(cb) {
 	this.populate('users', function(err, doc) {
 		async.map(doc.users, function(user, callback) {
-			github.user.getKeysFromUser({user: user.github}, function(err, data) {
+			github.user.getKeysFromUser({user: user.github.username}, function(err, data) {
 				if (err) {
 					callback(err, null);
 				} else {
