@@ -7,9 +7,8 @@ RUN			npm install -g supervisor
 RUN			apt-get -y install rubygems
 RUN			gem install foreman
 
-# Install app dependencies
-# ADD 		package.json /modules/package.json
-# RUN			cd /modules && npm install
+# Build tools, for Mongo
+RUN 		apt-get -y install build-essential
 
 # Load in source
 ADD 		. /src
