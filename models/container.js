@@ -99,13 +99,21 @@ containerSchema.methods.run = function(options, callback) {
 	});
 
 	vms.run(options, function(err, info) {
-		console.log('ran', err, info);
-		self.name = info.name;
-		self.container = info.container.id;
-		self.ports = info.data.NetworkSettings.Ports;
-		self.save(function() {
-			callback(null, self);
-		});
+		if (err) {
+			console.log(err);
+			self.remove(function() {
+				console.log('had to remove');
+				callback(err, null);
+			});
+		} else {
+			console.log('ran', err, info);
+			self.name = info.name;
+			self.container = info.container.id;
+			self.ports = info.data.NetworkSettings.Ports;
+			self.save(function() {
+				callback(null, self);
+			});
+		}
 	});
 };
 
