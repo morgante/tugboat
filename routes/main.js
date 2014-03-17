@@ -18,8 +18,20 @@ exports.create = function(req, res) {
 exports.remove = function(req, res) {
 	var id = req.params.id;
 
-	Container.remove({_id: id, users: {$in: [req.user._id]}}).exec(function(a, b) {
-		res.send('removed');
+	Container.findOne({_id: id, users: {$in: [req.user._id]}}).exec(function(err, doc) {
+		if (err || doc === null) {
+			console.log(err);
+			res.send('error');
+		} else {
+			doc.remove(function(err) {
+				if (err) {
+					console.log(err);
+					res.send('error');
+				} else {
+					res.send('removed');
+				}
+			});
+		}
 	});
 };
 
