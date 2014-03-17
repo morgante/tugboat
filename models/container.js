@@ -29,14 +29,18 @@ containerSchema.virtual('ip').get(function () {
 containerSchema.set('toJSON', { virtuals: true });
 
 containerSchema.pre('remove', function (next) {
-	console.log('try removing');
-	vms.remove({
-		container: this.container,
-		image: this.image
-	}, function(err) {
-		console.log('done removing', err);
-		next(err);
-	});
+	if (self.container === undefined) {
+		next();
+	} else {
+		console.log('try removing');
+		vms.remove({
+			container: this.container,
+			image: this.image
+		}, function(err) {
+			console.log('done removing', err);
+			next(err);
+		});
+	}
 });
 
 containerSchema.methods.getKeys = function(cb) {
