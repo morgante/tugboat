@@ -23,6 +23,17 @@ define([
 		initialize: function () {
 			this.listenTo(this.collection, 'add', this.addInstance);
 
+			// fetch initial elements
+			this.collection.fetch({
+				success: function(collection, response, options) {
+					console.log('all fetched');
+				},
+				error: function(collection, response, options) {
+					alert('Sorry, we are experiencing technical difficulties.');
+					console.log(collection, response, options);
+				}
+			});
+
 			// render off the bat
 			this.render();
 		
