@@ -18,6 +18,9 @@ RUN			gem install foreman
 # Build tools, for Mongo
 RUN 		apt-get -y install build-essential
 
+# Install git
+RUN 		apt-get -y install git-core
+
 # Load in source
 ADD 		. /src
 RUN			cd /src && npm install
