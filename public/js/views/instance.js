@@ -16,6 +16,10 @@ define([
 
 		tagName:  'div',
 
+		events: {
+			'click [data-role="remove"]':	'delete'
+		},
+
 		initialize: function () {
 			// this.$map = $('.map', this.$el);
 
@@ -25,6 +29,14 @@ define([
 			// render off the bat
 			this.render();
 		
+		},
+
+		delete: function() {
+			console.log('destroying...');
+			this.model.destroy();
+			this.remove();
+
+			return false;
 		},
 
 		render: function () {

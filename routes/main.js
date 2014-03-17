@@ -15,6 +15,14 @@ exports.create = function(req, res) {
 	});
 };
 
+exports.remove = function(req, res) {
+	var id = req.params.id;
+
+	Container.remove({_id: id, users: {$in: [req.user._id]}}).exec(function(a, b) {
+		res.send('removed');
+	});
+};
+
 exports.list = function(req, res) {
 
 	Container.find()

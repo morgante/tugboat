@@ -57,6 +57,7 @@
     <script id="instance-template" type="text/template">
     	<div class="instance">
     		<h3>{{ name }}</h3>
+    		<a data-role="remove" href="#remove">Delete</a>
     		<p>To access this container via SSH:</p>
     		<pre>ssh root@{{ ip }} -p {{ sshPort }} </pre>
     	</div>
