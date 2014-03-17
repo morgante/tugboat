@@ -1,5 +1,13 @@
 # DOCKER-VERSION 0.8.0
-FROM		denibertovic/node
+FROM 		ubuntu:12.04
+
+# Install node
+RUN			apt-get update
+RUN			apt-get install -y python-software-properties python g++ make
+RUN			add-apt-repository ppa:chris-lea/node.js
+RUN			apt-get update
+RUN 		apt-get install -y nodejs 
+RUN 		node --version
 
 RUN			npm install -g supervisor
 
@@ -17,5 +25,4 @@ RUN			cd /src && npm install
 EXPOSE  	8080
 
 WORKDIR		/src
-
 CMD		 	["foreman", "start"]
