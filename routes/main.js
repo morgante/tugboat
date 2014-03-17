@@ -1,6 +1,8 @@
 var Sample = require('../models/sample');
 var pkg = require('../package.json');
 
+var _ = require('../public/lib/underscore');
+
 var Container = require('../models/container');
 
 exports.create = function(req, res) {
@@ -11,6 +13,21 @@ exports.create = function(req, res) {
 			});
 		});
 	});
+};
+
+exports.list = function(req, res) {
+
+	Container.find()
+		.where('users').in([req.user._id])
+		.exec(function(err, containers) {
+			data = [];
+
+			_.each(containers, function(container) {
+				data.push(container.toJSON());
+			});
+
+			res.send(data);
+		});
 };
 
 exports.index = function( req, res ) {

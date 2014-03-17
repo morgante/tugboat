@@ -67,6 +67,7 @@ app.get('/auth/end', auth.finish); // finish the auth process
 
 // API for backbone
 app.post('/api/instances', main.create);
+app.get('/api/instances', main.list);
 
 /** PASSPORT */
 // authentication with passport
