@@ -62,7 +62,10 @@ app.get('/', main.index);
 // passport auth
 app.get('/auth/start', auth.start); // start the auth process
 app.get('/auth/passport', passport.authenticate('nyu-passport')); // pass along to passport
-app.get('/auth/passport/callback', passport.authenticate('nyu-passport', { successRedirect: '/auth/end', failureRedirect: '/auth/passport' })); // hear back from Passport
+app.get('/auth/passport/callback', passport.authenticate('nyu-passport', {
+	successRedirect: '/auth/end',
+	failureRedirect: '/auth/passport'
+})); // hear back from Passport
 app.get('/auth/end', auth.finish); // finish the auth process
 
 // API for backbone
@@ -89,27 +92,31 @@ passport.use('nyu-passport', new NYUPassportStrategy({
 	callbackURL: process.env.BASE_URL + '/auth/passport/callback'
 	},
 	function(accessToken, refreshToken, profile, done) {
-		User.findOrCreate({netID: profile.netID}, function(err, user, isNew) {
-			// add the access token
-			user.passport = accessToken;
+		if (profile.groups.indexOf('hackad') == -1) {
+			done(new Error('Sorry, you do not have access to Tugboat. See Morgante.'));
+		} else {
+			User.findOrCreate({netID: profile.netID}, function(err, user, isNew) {
+				// add the access token
+				user.passport = accessToken;
 
-			if (isNew) {
-				request('http://passport.sg.nyuad.org/visa/github/token?access_token=' + accessToken, function(err, res, data) {
-					data = JSON.parse(data);
+				if (isNew) {
+					request('http://passport.sg.nyuad.org/visa/github/token?access_token=' + accessToken, function(err, res, data) {
+						data = JSON.parse(data);
 
-					user.github.username = data.profile.username;
-					user.github.token = data.access_token;
+						user.github.username = data.profile.username;
+						user.github.token = data.access_token;
 
-					user.save(function(err) {
-						done(null, user);
+						user.save(function(err) {
+							done(null, user);
+						});
 					});
-				});
-			} else {
-				user.save(function(err) {
-				});
-				done(null, user);
-			}
-		});
+				} else {
+					user.save(function(err) {
+					});
+					done(null, user);
+				}
+			});
+		}
 	}
 ));
 
