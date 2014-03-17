@@ -2,8 +2,9 @@ define([
 	'jquery',
 	'underscore',
     'backbone',
+    'bootstrap',
     'views/instance',
-], function ($, _, Backbone, InstanceView) {
+], function ($, _, Backbone, bootstrap, InstanceView) {
 	_.templateSettings = {
         evaluate : /\{\( (.+?) \)\}/gi,
         interpolate : /\{\{ (.+?) \}\}/gi,
@@ -40,18 +41,22 @@ define([
 		},
 
 		createOne: function (e) {
+			this.$btn.button('loading');
 			this.collection.create({}, {wait: true});
 		},
 
 		addInstance: function(model) {
 			var view = new InstanceView({ model: model });
 			$('#instances').append(view.render().el);
+			this.$btn.button('reset');
 		},
 
 		render: function () {
 			var view = this;
 
 			this.$el.html(this.template({}));
+
+			this.$btn = $('#newContainer');
 
 			return this;
 		},
