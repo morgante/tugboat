@@ -23,7 +23,7 @@ containerSchema.virtual('sshPort').get(function () {
 });
 
 containerSchema.virtual('ip').get(function () {
-	return '127.0.0.1';
+	return process.env.SSH_IP;
 });
 
 containerSchema.set('toJSON', { virtuals: true });
@@ -99,6 +99,7 @@ containerSchema.methods.run = function(options, callback) {
 	});
 
 	vms.run(options, function(err, info) {
+		console.log('ran', err, info);
 		self.name = info.name;
 		self.container = info.container.id;
 		self.ports = info.data.NetworkSettings.Ports;
